@@ -63,10 +63,10 @@ try:
             "intro": intro.get_text(strip=True) if intro else ""
         })
 
-    with open("books_selenium.json", "w", encoding="utf-8") as f:
+    with open("books.json", "w", encoding="utf-8") as f:
         json.dump(book_list, f, ensure_ascii=False, indent=2)
 
-    print(f"Saved {len(book_list)} items to books_selenium.json")
+    print(f"Saved {len(book_list)} items to books.json")
 
 finally:
     driver.quit()
