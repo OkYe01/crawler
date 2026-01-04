@@ -48,9 +48,14 @@ try:
     for b in books:
         title = b.select_one(".prod_name")
         author_block = b.select_one(".prod_author")
-        price = b.select_one(".price_normal")
+        price_tag = b.select_one(".price_normal .val")
         intro = b.select_one(".prod_introduction")
 
+        # 가격 숫자만 추출 (예 : 정가13,000원 -> 13000)
+        price = (
+            int(price_tag.get_text(strip=True).replace(",", "").replace("원", ""))
+            if price_tag else None
+        )
         # 작가 / 출판사 / 출판일 분리
         author, publisher, pub_date = parse_author_block(author_block)
 
@@ -59,7 +64,7 @@ try:
             "author": author,
             "publisher": publisher,
             "pub_date": pub_date,
-            "price": price.get_text(strip=True) if price else "",
+            "price": price,
             "intro": intro.get_text(strip=True) if intro else ""
         })
 
