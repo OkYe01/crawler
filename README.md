@@ -27,7 +27,7 @@
   - publisher
   - pub_date
   - price
-  - intro
+  - description
 - 결과를 `books_selenium.json` 파일로 저장
 
 ### Run
