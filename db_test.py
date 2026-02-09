@@ -3,9 +3,9 @@ import psycopg2
 try:
     conn = psycopg2.connect(
         host="localhost",      # 또는 127.0.0.1
-        dbname="papery",
-        user="papery",
-        password="1234",
+        dbname="Papery",
+        user="postgres",
+        password="root",
         port=5432              # 기본 포트
     )
 

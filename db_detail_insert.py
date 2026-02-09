@@ -69,7 +69,7 @@ def insert_book(book, publisher_id):
         publisher_id,
         book["pub_date"],
         book["price"],
-        book["intro"],
+        book["description"],
         book["isbn"],
         book["page_cnt"],
         book["book_size"]
