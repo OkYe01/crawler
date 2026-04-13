@@ -8,8 +8,8 @@ driver = create_driver()
 books = crawl_list_pages(
     driver,
     base_url="https://product.kyobobook.co.kr/category/KOR/0101",
-    start_page=1,
-    end_page=1
+    start_page=5,
+    end_page=9
 )
 
 print(f"총 수집된 책 수: {len(books)}")

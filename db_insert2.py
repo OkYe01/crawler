@@ -30,8 +30,13 @@ def upsert_publisher(cur, name):
                 ON CONFLICT (name) DO UPDATE
                     SET name = EXCLUDED.name
                 RETURNING id
-                """, (name,))
-    return cur.fetchone()[0]
+                """,
+                (name,))
+    row = cur.fetchone()
+    if row is None:
+        cur.execute("SELECT id FROM publisher WHERE name = %s", (name,))
+        row = cur.fetchone()
+    return row[0]
 
 def upsert_author(cur, author):
     cur.execute("""
@@ -47,7 +52,11 @@ def upsert_author(cur, author):
                     author.get("birth"),
                     author["author_code"],
                 ))
-    return cur.fetchone()[0]
+    row = cur.fetchone()
+    if row is None:
+        cur.execute("SELECT id FROM author WHERE author_code = %s", (author["author_code"],))
+        row = cur.fetchone()
+    return row[0]
 
 def upsert_book(cur, book, publisher_id):
     price = to_int_or_none(book.get("price"))
@@ -75,7 +84,11 @@ def upsert_book(cur, book, publisher_id):
                     publisher_id,
                     1
                 ))
-    return cur.fetchone()[0]
+    row = cur.fetchone()
+    if row is None:
+        cur.execute("SELECT id FROM book WHERE isbn = %s", (book["isbn"],))
+        row = cur.fetchone()
+    return row[0]
 
 def insert_author_book_map(cur, book_id, author_id):
     cur.execute("""
@@ -86,6 +99,7 @@ def insert_author_book_map(cur, book_id, author_id):
 
 def main():
     books = load_books("books.json")
+    books = [b for b in books if b is not None]
 
     conn = psycopg2.connect(**DB_CONFIG)
     try:
@@ -107,6 +121,8 @@ def main():
 
     except Exception as e:
         conn.rollback()
+        import traceback
+        traceback.print_exc()
         print("❌ 오류 발생:", e)
 
     finally:
